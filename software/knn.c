@@ -5,6 +5,8 @@
 #include "iob_knn.h"
 #include "random.h" //random generator for bare metal
 
+#include <stdlib.h>
+
 //uncomment to use rand from C lib 
 //#define cmwc_rand rand
 
@@ -35,24 +37,36 @@ int main() {
   uart_printf("\nInit timer\n");
 
   //generate random seed 
-  random_init(S);
+
+  //cmwc_rand
+  //random_init(S);
+  //num = (short) cmwc_rand();
+
+  srand(S);
+
 
 
   short num;
   short max = 0;
+  int x[100];
+  int y[97];
 
   //init dataset
-  for (int i=0; i<10; i++) {
-    //init coordinates
-    num = (short) cmwc_rand();
-    uart_printf("random %d = %d\n",i, num);  
 
-    if (num > max ){
-      max = num;
-    }
+  for (int j = 0; j < 100; j++){
+    x[j] = rand()%100;
+  } 
+
+
+  for ( int i=3; i<100; i++) {
+        //init coordinates
+
+  y[i] = x[i]*x[i-1]-x[i-2]/x[i-3];
+  
+  uart_printf("\ny[%d] = %d",i, y[i]);     
     
   }
-  uart_printf("\nmax = %d\n", max);
+  uart_printf("\n");
   return 0;  
 }
 
