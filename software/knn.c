@@ -4,6 +4,7 @@
 #include "iob_timer.h"
 #include "iob_knn.h"
 #include "random.h" //random generator for bare metal
+#include <stdint.h>
 
 #include <stdlib.h>
 
@@ -34,7 +35,7 @@ int main() {
 
   //init uart and timer
   uart_init(UART_BASE, FREQ/BAUD);
-  uart_printf("\nInit timer\n");
+  //uart_printf("\nInit timer\n");
 
   //generate random seed 
 
@@ -46,26 +47,44 @@ int main() {
 
 
 
-  short num;
-  short max = 0;
-  int x[100];
-  int y[97];
+  
 
   //init dataset
 
-  for (int j = 0; j < 100; j++){
-    x[j] = rand()%100;
-  } 
+
+
+  knn_init(KNN_BASE);
+
+ 
+  knn_start();//enable 1
+  knn_reset();//reset 1, enable 0
+
+  int x = 0, x_1 = rand(), x_2 = rand(), x_3 = rand(),y;
+  
+
+  knn_set(x_3);
+	knn_set(x_2);
+	knn_set(x_1);
 
 
   for ( int i=3; i<100; i++) {
-        //init coordinates
+    x = rand();
+    knn_set(x);
 
-  y[i] = x[i]*x[i-1]-x[i-2]/x[i-3];
-  
-  uart_printf("\ny[%d] = %d",i, y[i]);     
+    y = x*x_1-x_2/x_3;
+
+		x_3=x_2;
+		x_2=x_1;
+		x_1=x;
+
+    uart_printf("\nIteração = %d, y_hardware = %d \n", i, knn_read());     
     
   }
+
+  knn_reset();
+  knn_stop();
+
+
   uart_printf("\n");
   return 0;  
 }
