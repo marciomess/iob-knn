@@ -33,56 +33,6 @@
 ///////////////////////////////////////////////////////////////////
 int main() { 
 
-  //init uart and timer
-  uart_init(UART_BASE, FREQ/BAUD);
-  //uart_printf("\nInit timer\n");
-
-  //generate random seed 
-
-  //cmwc_rand
-  //random_init(S);
-  //num = (short) cmwc_rand();
-
-  srand(S);
-
-
-
-  
-
-  //init dataset
-
-
-
-  knn_init(KNN_BASE);
-
- 
-  knn_start();//enable 1
-  knn_reset();//reset 1, enable 0
-
-  int x = 0, x_1 = rand(), x_2 = rand(), x_3 = rand(),y;
-  
-
-  knn_set(x_3);
-	knn_set(x_2);
-	knn_set(x_1);
-
-
-  for ( int i=3; i<100; i++) {
-    x = rand();
-    knn_set(x);
-
-    y = x*x_1-x_2/x_3;
-
-		x_3=x_2;
-		x_2=x_1;
-		x_1=x;
-
-    uart_printf("\nIteração = %d, y_hardware = %d \n", i, knn_read());     
-    
-  }
-
-  knn_reset();
-  knn_stop();
 
 
   uart_printf("\n");
